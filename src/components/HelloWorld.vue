@@ -1,58 +1,118 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div @click="btn" class="wrapper">
+    请点击我
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
-</script>
+  components: {},
+  props: {},
+  data() {
+    return {
+      a: 6,
+      name: 'kk'
+    };
+  },
+  methods: {
+    btn(){
+      console.log(this)
+      let obj = {
+        name : 'obj',
+        A    : function(){
+            ()=>{
+                console.log(this)
+            }
+        },
+        B    :() => {
+          console.log(this)
+            // console.log(this.name)
+        }
+    }
+    obj.A(); //输出 obj
+    obj.B(); //输出 this
+    },
+      jicheng() {
+      function Parent(name){
+        this.name = name;
+        this.colors = ["blue","yellow","green"];
+      }
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+      function Child(name,age){
+        Parent.call(this,name);
+        this.age = age;
+      }
+
+      Child.prototype = new Parent();
+      Child.prototype.sayAge = function(){
+        console.log(this.age);
+      }
+      let child1 = new Child('kk',22);
+      child1.sayAge();
+      let p1 = new Parent('zz');
+      // p1.__proto__.sayAge();
+      console.log('p1',p1);
+      console.log('c1',child1);
+      console.log('p1p',p1.__proto__);
+      console.log('c1c',child1.__proto__)
+      console.log('p1',p1)
+    },
+    // 1、借用构造函数（伪造对象/经典继承）
+    one() {
+      function Parent(name){
+        this.name = name;
+      }
+      Parent.prototype.sayAge = function(word){
+        console.log('99',word);
+        let age = 66;
+        return age ;
+      }
+      function Child(){
+        Parent.call(this,"parent");
+        this.age = 24;
+      }
+      Child.prototype = new Parent('pp')
+      //因为修改了Student原型链,需要把其原型链上构造器重新指向自己
+      Child.prototype.constructor = Child;
+        let c1 = new Child();
+        let p1 = new Parent('kk');
+        console.log('p1',p1.sayAge('66'))
+        console.log('c1',c1)
+        // c1.sayAge();
+    },
+    two() {
+      class Person {
+        constructor(age, name) {
+            this.age = age;
+            this.name = name;
+        }
+        sayHi(){
+            console.log("I'm a Person! age="+this.age+" name="+this.name);
+        }
+        sayAge() {
+          console.log('my age is 22')
+        }
+      }
+      class Student extends Person{
+          constructor(sno,age,name) {
+              super(age, name);
+              this.sno = sno;
+          }
+      }
+      var s = new Student(95001,24,"小红");
+      console.log(Student.prototype.constructor);
+      s.sayHi();
+      s.sayAge();
+    }
+  },
+  created() {
+    // this.jicheng()
+    // this.one();
+    this.two();
+  },
+  mounted() {}
+};
+</script>
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+.wrapper{}
 </style>
